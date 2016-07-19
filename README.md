@@ -5,4 +5,4 @@ Follows a standard Ziplink Storage format and provides:
  - createZiplink(ziplinkData, callback)
  - findByShortID(shortID) //shortID is an ID encoded by ziplink-simple-encoder
  - findByNumericalID(numericalID) //numericalID is the _id value of the Ziplink
- - getEncodedID() //returns the encodedID of the ziplink
+ - getEncodedID() //returns the encodedID of the ziplinkl
