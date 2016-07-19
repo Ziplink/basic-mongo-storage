@@ -6,7 +6,6 @@ var connection = mongoose.createConnection('mongodb://localhost/ziplink');
 
 autoIncrement.initialize(connection);
 
-var shortid = require('shortid');
 var url = require('url');
 var base = require('base-converter');
 
@@ -39,7 +38,11 @@ var ziplinkSchema = new Schema({
  *	Add the autoIncrement plugin to the schema
  *	Sets the _id of each Ziplink to the previous _id+1
  */
-ziplinkSchema.plugin(autoIncrement.plugin, 'Ziplink');
+ziplinkSchema.plugin(autoIncrement.plugin, {
+	model: 'Ziplink',
+	field: '_id',
+	startAt: 1
+});
 
 ziplinkSchema.statics.findByZiplinkID = function (linkID, callback){
 	this.findOne({'ziplinkID': linkID}, callback);
