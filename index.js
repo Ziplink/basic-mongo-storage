@@ -51,7 +51,7 @@ ziplinkSchema.plugin(autoIncrement.plugin, {
  * @param {string} ID
  */
 ziplinkSchema.statics.findByID = function(ID, callback) {
-  this.findByDecodedID(base.genericToDec(ID, ID_ALPHABET), callback);
+  this.findById(base.genericToDec(ID, ID_ALPHABET), callback);
 };
 
 
