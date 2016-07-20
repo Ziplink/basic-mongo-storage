@@ -1,6 +1,8 @@
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema,
   autoIncrement = require('mongoose-auto-increment');
+  
+mongoose.Promise = require('bluebird');
 
 var connection = mongoose.createConnection('mongodb://localhost/ziplink');
 
@@ -85,9 +87,11 @@ ziplinkSchema.statics.createZiplink = function(ziplinkData, callback) {
 
   var newZiplink = new this(ziplinkData);
 
-  newZiplink.save(function(err) {
-    callback(err, newZiplink);
-  });
+  newZiplink.save()
+    .then(function(newZiplink){
+    	callback('', newZiplink);
+    })
+    .catch(callback);
 };
 
 /**

@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "base-converter": "^1.1.2",
+    "bluebird": "^3.4.1",
     "mongoose": "^4.5.5",
     "mongoose-auto-increment": "^5.0.1",
     "shortid": "^2.2.6"
