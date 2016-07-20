@@ -44,16 +44,8 @@ ziplinkSchema.plugin(autoIncrement.plugin, {
 	startAt: 1
 });
 
-ziplinkSchema.statics.findByZiplinkID = function (linkID, callback){
-	this.findOne({'ziplinkID': linkID}, callback);
-};
-
-ziplinkSchema.statics.findByEncodedID = function(encodedID, callback){
-	this.findByDecodedID(base.genericToDec(encodedID, ID_ALPHABET), callback);
-};
-
-ziplinkSchema.statics.findByDecodedID = function(decodedID, callback){
-	this.findById(decodedID, callback);
+ziplinkSchema.statics.findByID = function(ID, callback){
+	this.findByDecodedID(base.genericToDec(ID, ID_ALPHABET), callback);
 };
 
 /**
@@ -61,11 +53,11 @@ ziplinkSchema.statics.findByDecodedID = function(decodedID, callback){
  *	
  *	callback will be passed the arguments (err, ziplink)
  */
-ziplinkSchema.statics.createZiplinkFromTemplate = function (ziplinkTemplate, callback){
+ziplinkSchema.statics.createZiplink = function (ziplinkData, callback){
 
 	// Pull the protocol off the URL
 	// This doesn't do any protocol checking, that is done by the supplied enum.
-	ziplinkTemplate.sublinks.forEach(function(sublink) {
+	ziplinkData.sublinks.forEach(function(sublink) {
 		var urlObject = url.parse(sublink.url);
 
 		// If `url` fails to parse the given URL we assume it's malformed in a way
@@ -83,7 +75,7 @@ ziplinkSchema.statics.createZiplinkFromTemplate = function (ziplinkTemplate, cal
 		sublink.url = urlObject.host || '' + urlObject.path || '' + urlObject.hash || '';
 	});
 
-	var newZiplink = new this(ziplinkTemplate);
+	var newZiplink = new this(ziplinkData);
 
 	newZiplink.save(function(err){
 		console.log(err);
@@ -91,9 +83,9 @@ ziplinkSchema.statics.createZiplinkFromTemplate = function (ziplinkTemplate, cal
 	});
 };
 
-ziplinkSchema.methods.getEncodedID = function(){
+ziplinkSchema.virtual('ID').get(function(){
 	return base.decToGeneric(this._id, ID_ALPHABET);
-};
+});
 
 var Ziplink = connection.model('Ziplink', ziplinkSchema);
 
