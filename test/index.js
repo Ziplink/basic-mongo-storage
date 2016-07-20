@@ -1,5 +1,8 @@
-var expect = require('chai').expect,
+var chai = require('chai'),
+  expect = chai.expect,
   Ziplink = require('../index.js');
+  
+const DEFAULT_ZIPLINK_NAME = 'Ziplink';
   
 const TEST_DATA = [
   { //Simplest usable
@@ -35,8 +38,9 @@ describe('API v0.1', function(){
       it('creates Ziplink from TEST_DATA[' + index + ']', function(done){
 
         Ziplink.createZiplink(testData, function(err, ziplink){
-          if(!ziplink && !err)
-            err = new Error('Neither ziplink nor err returned to callback');
+          
+          expect(ziplink).to.exist;
+          expect(ziplink.name).to.equal(testData.name || DEFAULT_ZIPLINK_NAME);
             
           if(ziplink)
             testData.ID = ziplink.ID;
@@ -58,8 +62,9 @@ describe('API v0.1', function(){
         Ziplink.findByID(testData.ID, function(err, ziplink){
           
           expect(ziplink).to.exist;
-          expect(ziplink.name).to.equal(testData.name || 'Ziplink');
-            
+          expect(ziplink.name).to.equal(testData.name || DEFAULT_ZIPLINK_NAME);
+          expect(ziplink.ID).to.equal(testData.ID);
+          
           done(err);
           
         });
