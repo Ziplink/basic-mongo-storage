@@ -50,4 +50,24 @@ describe('API v0.1', function(){
     
   });
   
+  describe('findByID(ID)', function(){
+    
+    TEST_DATA.forEach(function(testData, index){
+      
+      it('finds correct Ziplink from TEST_DATA[' + index + ']', function(done){
+        Ziplink.findByID(testData.ID, function(err, ziplink){
+          
+          expect(ziplink).to.exist;
+          expect(ziplink.name).to.equal(testData.name || 'Ziplink');
+            
+          done(err);
+          
+        });
+        
+      });
+      
+    });
+    
+  });
+  
 });
