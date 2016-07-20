@@ -1,6 +1,6 @@
 {
   "name": "ziplink-basic-mongo-storage",
-  "version": "0.0.0",
+  "version": "0.1",
   "private": true,
   "scripts": {},
   "dependencies": {
@@ -8,13 +8,5 @@
     "mongoose": "^4.5.5",
     "mongoose-auto-increment": "^5.0.1",
     "shortid": "^2.2.6"
-  },
-  "gitHead": "5926aa6ad02363c77965c02928441056fe177405",
-  "readme": "# ziplink-basic-mongo-storage\nSimple DB handler to store Ziplinks in MongoDB\n\nFollows a standard Ziplink Storage format and provides:\n - createZiplink(ziplinkData, callback)\n - findByShortID(shortID) //shortID is an ID encoded by ziplink-simple-encoder\n - findByNumericalID(numericalID) //numericalID is the _id value of the Ziplink\n - getEncodedID() //returns the encodedID of the ziplinkl",
-  "readmeFilename": "README.md",
-  "description": "Simple DB handler to store Ziplinks in MongoDB",
-  "_id": "ziplink-basic-mongo-storage@0.0.0",
-  "_shasum": "6a80f943c0a26cf5cb050b0ed187aff8a1626832",
-  "_from": "git://github.com/Ziplink/ziplink-basic-mongo-storage.git",
-  "_resolved": "git://github.com/Ziplink/ziplink-basic-mongo-storage.git#5926aa6ad02363c77965c02928441056fe177405"
+  }
 }
