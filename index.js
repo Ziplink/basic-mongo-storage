@@ -89,7 +89,7 @@ ziplinkSchema.statics.createZiplink = function(ziplinkData, callback) {
 
   newZiplink.save()
     .then(function(newZiplink){
-    	callback('', newZiplink);
+    	callback(undefined, newZiplink);
     })
     .catch(callback);
 };
