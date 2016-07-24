@@ -99,6 +99,10 @@ ziplinkSchema.statics.createZiplink = function(ziplinkData, callback) {
     .catch(callback);
 };
 
+ziplinkSchema.statics.editZiplink = function(ID, ziplinkData, cb){
+  this.findOneAndUpdate({ '_id': base.genericToDec(ID, ID_ALPHABET) }, { $set: ziplinkData }, {new: true}, cb);
+};
+
 /**
  * ID Virtual Property
  * 

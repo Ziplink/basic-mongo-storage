@@ -4,7 +4,7 @@ var chai = require('chai'),
   
 const DEFAULT_ZIPLINK_NAME = 'Ziplink';
   
-const TEST_DATA = [
+var TEST_DATA = [
   { //Simplest usable
     sublinks: [
       {
@@ -26,8 +26,25 @@ const TEST_DATA = [
       {
         url: 'facebook.com'
       }]
+  },
+  { //Owned Ziplinks
+    name: "Owned Ziplink",
+    user: { id: "123456" },
+    sublinks: [
+      {
+        url: 'google.com'
+      }]
   }
 ];
+
+var UPDATE_ZIPLINK = {
+    name: "Updated Ziplink",
+    user: { id: "Updated" },
+    sublinks: [
+      {
+        url: 'updated.com'
+      }]
+};
 
 describe('API v0.1', function(){
   
@@ -67,6 +84,27 @@ describe('API v0.1', function(){
           
           done(err);
           
+        });
+        
+      });
+      
+    });
+    
+  });
+  
+  describe('editZiplink(ID, ziplinkData, cb)', function(){
+    
+    TEST_DATA.forEach(function(testData, index){
+      
+      it('successfully updates Ziplink', function(done){
+        
+        Ziplink.editZiplink(testData.ID, UPDATE_ZIPLINK, function(err, ziplink){
+          
+          expect(ziplink.name).to.equal(UPDATE_ZIPLINK.name);
+          expect(ziplink.user.ID).to.equal(UPDATE_ZIPLINK.user.ID);
+          expect(ziplink.sublinks[0].url).to.equal(UPDATE_ZIPLINK.sublinks[0].url);
+          
+          done(err);
         });
         
       });
