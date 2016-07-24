@@ -19,6 +19,11 @@ var ziplinkSchema = new Schema({
     default: "Ziplink",
     maxlength: [64, 'Name too long']
   },
+  user: {
+    id: {
+      type: String
+    }
+  },
   sublinks: [{
     url: {
       type: String,
