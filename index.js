@@ -1,129 +1,48 @@
 'use strict';
-
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
-var autoIncrement = require('mongoose-auto-increment');
-
-mongoose.Promise = require('bluebird');
-
-var connection = mongoose.createConnection('mongodb://localhost/ziplink');
-
-autoIncrement.initialize(connection);
-
-var url = require('url');
-var base = require('base-converter');
-
-var ID_ALPHABET = 'abcdefghijklmnopqrstuvwxyz' +
-  'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-
-var ziplinkSchema = new Schema({
-  name: {
-    type: String,
-    default: 'Ziplink',
-    maxlength: [64, 'Name too long'],
-  },
-  user: {
-    id: {
-      type: String,
-    },
-  },
-  sublinks: [{
-    url: {
-      type: String,
-      required: true,
-      minlength: [4, 'URL too short'],
-      maxlength: [2083, 'URL too long'],
-    },
-    protocol: {
-      type: String,
-      default: 'http:',
-      required: true,
-      enum: ['http:', 'https:', 'ftp:'],
-    },
-  }, ],
-});
-
 /**
- *  Add the autoIncrement plugin to the schema
- *  Sets the _id of each Ziplink to the previous _id+1
+ * Promise Wrapper for Ziplink Model
  */
-ziplinkSchema.plugin(autoIncrement.plugin, {
-  model: 'Ziplink',
-  field: '_id',
-  startAt: 1,
-});
+var Ziplink = require('./lib/model.js');
+var Promise = require('bluebird');
 
-/**
- * Find Ziplink by ID
- *
- * @param {string} ID
- */
-ziplinkSchema.statics.findByID = function(ID, callback) {
-  this.findById(base.genericToDec(ID, ID_ALPHABET), callback);
-};
-
-
-/**
- * Creates and saves a Ziplink
- *
- * @param {object} ziplinkData
- * @param {string} name
- * @param {object[]} sublinks
- * @param {string} sublinks[].url
- */
-ziplinkSchema.statics.createZiplink = function(ziplinkData, callback) {
-
-  // Pull the protocol off the URL
-  // This doesn't do any protocol checking, that is done by the supplied enum.
-  ziplinkData.sublinks.forEach(function(sublink) {
-    var urlObject = url.parse(sublink.url);
-
-    // If `url` fails to parse the given URL we assume it's malformed in a way
-    // and discard it
-    if (urlObject === null) {
-      callback('The URL: ' + sublink.url + ' isn\'t a valid URL');
-    }
-
-    // If we don't get a protocol, remove reference so mongoose uses default
-    if (urlObject.protocol === null) {
-      delete urlObject.protocol;
-    }
-
-    sublink.protocol = urlObject.protocol;
-
-    // TODO: possibly store this information in component parts in DB
-    sublink.url = urlObject.host || '' + urlObject.path || '' +
-      urlObject.hash || '';
+function findById(id) {
+  return new Promise(function(resolve, reject) {
+    Ziplink.findByID(id, function(err, ziplink) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(ziplink);
+      }
+    });
   });
+}
 
-  var newZiplink = new this(ziplinkData);
+function editZiplink(id, ziplinkData) {
+  return new Promise(function(resolve, reject) {
+    Ziplink.editZiplink(id, ziplinkData, function(err, ziplink) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(ziplink);
+      }
+    });
+  });
+}
 
-  newZiplink.save()
-    .then(function(newZiplink) {
-      callback(undefined, newZiplink);
-    })
-    .catch(callback);
+function createZiplink(ziplinkData) {
+  return new Promise(function(resolve, reject) {
+    Ziplink.create(ziplinkData, function(err, ziplink) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(ziplink);
+      }
+    });
+  });
+}
+
+module.exports = exports = {
+  findById: findById,
+  editZiplink: editZiplink,
+  createZiplink: createZiplink,
 };
-
-ziplinkSchema.statics.editZiplink = function(ID, ziplinkData, cb) {
-  this.findOneAndUpdate({
-    _id: base.genericToDec(ID, ID_ALPHABET),
-  }, {
-    $set: ziplinkData,
-  }, {
-    new: true,
-  }, cb);
-};
-
-/**
- * ID Virtual Property
- *
- * @returns {string} - Returns the external ID of the Ziplink
- */
-ziplinkSchema.virtual('ID').get(function() {
-  return base.decToGeneric(this._id, ID_ALPHABET);
-});
-
-var Ziplink = connection.model('Ziplink', ziplinkSchema);
-
-module.exports = exports = Ziplink;
