@@ -16,17 +16,18 @@ describe('ziplink-basic-mongo-storage', function() {
 
       it('creates Ziplink from TEST_DATA[' + index + ']', function(done) {
 
-        Ziplink.createZiplink(testData, function(err, ziplink) {
+        Ziplink.createZiplink(testData)
+          .then(function(ziplink) {
+            expect(ziplink).to.exist;
+            expect(ziplink.name)
+              .to.equal(testData.name || DEFAULT_ZIPLINK_NAME);
 
-          expect(ziplink).to.exist;
-          expect(ziplink.name).to.equal(testData.name || DEFAULT_ZIPLINK_NAME);
-
-          if (ziplink) {
-            testData.ID = ziplink.ID;
-          }
-          done(err);
-        });
-
+            // Save the ID so we can find this again later
+            if (ziplink) {
+              testData.ID = ziplink.ID;
+            }
+            done();
+          }).catch(done);
       });
 
     });
@@ -38,15 +39,14 @@ describe('ziplink-basic-mongo-storage', function() {
     TEST_DATA.forEach(function(testData, index) {
 
       it('finds correct Ziplink from TEST_DATA[' + index + ']', function(done) {
-        Ziplink.findByID(testData.ID, function(err, ziplink) {
-
-          expect(ziplink).to.exist;
-          expect(ziplink.name).to.equal(testData.name || DEFAULT_ZIPLINK_NAME);
-          expect(ziplink.ID).to.equal(testData.ID);
-
-          done(err);
-
-        });
+        Ziplink.findById(testData.ID)
+          .then(function(ziplink) {
+            expect(ziplink).to.exist;
+            expect(ziplink.name)
+              .to.equal(testData.name || DEFAULT_ZIPLINK_NAME);
+            expect(ziplink.ID).to.equal(testData.ID);
+            done();
+          }).catch(done);
 
       });
 
@@ -60,14 +60,14 @@ describe('ziplink-basic-mongo-storage', function() {
 
       it('successfully updates Ziplink', function(done) {
 
-        Ziplink.editZiplink(testData.ID, UPDATE_DATA, function(err, ziplink) {
-
-          expect(ziplink.name).to.equal(UPDATE_DATA.name);
-          expect(ziplink.user.ID).to.equal(UPDATE_DATA.user.ID);
-          expect(ziplink.sublinks[0].url).to.equal(UPDATE_DATA.sublinks[0].url);
-
-          done(err);
-        });
+        Ziplink.editZiplink(testData.ID, UPDATE_DATA)
+          .then(function(ziplink) {
+            expect(ziplink.name).to.equal(UPDATE_DATA.name);
+            expect(ziplink.user.ID).to.equal(UPDATE_DATA.user.ID);
+            expect(ziplink.sublinks[0].url)
+              .to.equal(UPDATE_DATA.sublinks[0].url);
+            done();
+          }).catch(done);
 
       });
 
