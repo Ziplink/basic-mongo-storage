@@ -1,7 +1,9 @@
-var mongoose = require('mongoose'),
-  Schema = mongoose.Schema,
-  autoIncrement = require('mongoose-auto-increment');
-  
+'use strict';
+
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+var autoIncrement = require('mongoose-auto-increment');
+
 mongoose.Promise = require('bluebird');
 
 var connection = mongoose.createConnection('mongodb://localhost/ziplink');
@@ -11,33 +13,34 @@ autoIncrement.initialize(connection);
 var url = require('url');
 var base = require('base-converter');
 
-var ID_ALPHABET = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+var ID_ALPHABET = 'abcdefghijklmnopqrstuvwxyz' +
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
 
 var ziplinkSchema = new Schema({
   name: {
     type: String,
-    default: "Ziplink",
-    maxlength: [64, 'Name too long']
+    default: 'Ziplink',
+    maxlength: [64, 'Name too long'],
   },
   user: {
     id: {
-      type: String
-    }
+      type: String,
+    },
   },
   sublinks: [{
     url: {
       type: String,
       required: true,
       minlength: [4, 'URL too short'],
-      maxlength: [2083, 'URL too long']
+      maxlength: [2083, 'URL too long'],
     },
     protocol: {
       type: String,
       default: 'http:',
       required: true,
-      enum: ['http:', 'https:', 'ftp:']
-    }
-  }]
+      enum: ['http:', 'https:', 'ftp:'],
+    },
+  }, ],
 });
 
 /**
@@ -47,12 +50,12 @@ var ziplinkSchema = new Schema({
 ziplinkSchema.plugin(autoIncrement.plugin, {
   model: 'Ziplink',
   field: '_id',
-  startAt: 1
+  startAt: 1,
 });
 
 /**
  * Find Ziplink by ID
- * 
+ *
  * @param {string} ID
  */
 ziplinkSchema.statics.findByID = function(ID, callback) {
@@ -62,7 +65,7 @@ ziplinkSchema.statics.findByID = function(ID, callback) {
 
 /**
  * Creates and saves a Ziplink
- * 
+ *
  * @param {object} ziplinkData
  * @param {string} name
  * @param {object[]} sublinks
@@ -77,35 +80,44 @@ ziplinkSchema.statics.createZiplink = function(ziplinkData, callback) {
 
     // If `url` fails to parse the given URL we assume it's malformed in a way
     // and discard it
-    if (urlObject === null)
+    if (urlObject === null) {
       callback('The URL: ' + sublink.url + ' isn\'t a valid URL');
+    }
 
     // If we don't get a protocol, remove reference so mongoose uses default
-    if (urlObject.protocol === null)
+    if (urlObject.protocol === null) {
       delete urlObject.protocol;
+    }
 
     sublink.protocol = urlObject.protocol;
 
-    //TODO: possibly store this information in component parts in DB
-    sublink.url = urlObject.host || '' + urlObject.path || '' + urlObject.hash || '';
+    // TODO: possibly store this information in component parts in DB
+    sublink.url = urlObject.host || '' + urlObject.path || '' +
+      urlObject.hash || '';
   });
 
   var newZiplink = new this(ziplinkData);
 
   newZiplink.save()
-    .then(function(newZiplink){
-    	callback(undefined, newZiplink);
+    .then(function(newZiplink) {
+      callback(undefined, newZiplink);
     })
     .catch(callback);
 };
 
-ziplinkSchema.statics.editZiplink = function(ID, ziplinkData, cb){
-  this.findOneAndUpdate({ '_id': base.genericToDec(ID, ID_ALPHABET) }, { $set: ziplinkData }, {new: true}, cb);
+ziplinkSchema.statics.editZiplink = function(ID, ziplinkData, cb) {
+  this.findOneAndUpdate({
+    _id: base.genericToDec(ID, ID_ALPHABET),
+  }, {
+    $set: ziplinkData,
+  }, {
+    new: true,
+  }, cb);
 };
 
 /**
  * ID Virtual Property
- * 
+ *
  * @returns {string} - Returns the external ID of the Ziplink
  */
 ziplinkSchema.virtual('ID').get(function() {

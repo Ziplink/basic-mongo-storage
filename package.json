@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "test": "mocha --reporter spec --recursive"
+    "test": "grunt test",
+    "postinstall": "grunt githooks"
   },
   "dependencies": {
     "base-converter": "^1.1.2",
@@ -14,6 +15,11 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "grunt": "~0.4.2",
+    "grunt-githooks": "^0.6.0",
+    "grunt-jscs": "^3.0.1",
+    "grunt-mocha-test": "^0.12.7",
+    "jscs": "^3.0.7",
     "mocha": "^2.5.3"
   }
 }
