@@ -1,10 +1,59 @@
 {
-  "name": "ziplink-basic-mongo-storage",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "test": "grunt test"
+  "_args": [
+    [
+      {
+        "raw": "ziplink-basic-mongo-storage@git://github.com/Ziplink/ziplink-basic-mongo-storage.git",
+        "scope": null,
+        "escapedName": "ziplink-basic-mongo-storage",
+        "name": "ziplink-basic-mongo-storage",
+        "rawSpec": "git://github.com/Ziplink/ziplink-basic-mongo-storage.git",
+        "spec": "git://github.com/Ziplink/ziplink-basic-mongo-storage.git",
+        "type": "hosted",
+        "hosted": {
+          "type": "github",
+          "ssh": "git@github.com:Ziplink/ziplink-basic-mongo-storage.git",
+          "sshUrl": "git+ssh://git@github.com/Ziplink/ziplink-basic-mongo-storage.git",
+          "httpsUrl": "git+https://github.com/Ziplink/ziplink-basic-mongo-storage.git",
+          "gitUrl": "git://github.com/Ziplink/ziplink-basic-mongo-storage.git",
+          "shortcut": "github:Ziplink/ziplink-basic-mongo-storage",
+          "directUrl": "https://raw.githubusercontent.com/Ziplink/ziplink-basic-mongo-storage/master/package.json"
+        }
+      },
+      "/home/ubuntu/workspace/ziplink.xyz"
+    ]
+  ],
+  "_from": "git://github.com/Ziplink/ziplink-basic-mongo-storage.git",
+  "_id": "ziplink-basic-mongo-storage@0.0.1",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/ziplink-basic-mongo-storage",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "ziplink-basic-mongo-storage@git://github.com/Ziplink/ziplink-basic-mongo-storage.git",
+    "scope": null,
+    "escapedName": "ziplink-basic-mongo-storage",
+    "name": "ziplink-basic-mongo-storage",
+    "rawSpec": "git://github.com/Ziplink/ziplink-basic-mongo-storage.git",
+    "spec": "git://github.com/Ziplink/ziplink-basic-mongo-storage.git",
+    "type": "hosted",
+    "hosted": {
+      "type": "github",
+      "ssh": "git@github.com:Ziplink/ziplink-basic-mongo-storage.git",
+      "sshUrl": "git+ssh://git@github.com/Ziplink/ziplink-basic-mongo-storage.git",
+      "httpsUrl": "git+https://github.com/Ziplink/ziplink-basic-mongo-storage.git",
+      "gitUrl": "git://github.com/Ziplink/ziplink-basic-mongo-storage.git",
+      "shortcut": "github:Ziplink/ziplink-basic-mongo-storage",
+      "directUrl": "https://raw.githubusercontent.com/Ziplink/ziplink-basic-mongo-storage/master/package.json"
+    }
   },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "git://github.com/Ziplink/ziplink-basic-mongo-storage.git#c25186e77a84c49db262c6282c837886c7edfee4",
+  "_shasum": "c04a8caee611cd4395553b1ea30a3295e8871f72",
+  "_shrinkwrap": null,
+  "_spec": "ziplink-basic-mongo-storage@git://github.com/Ziplink/ziplink-basic-mongo-storage.git",
+  "_where": "/home/ubuntu/workspace/ziplink.xyz",
   "dependencies": {
     "base-converter": "^1.1.2",
     "bluebird": "^3.4.1",
@@ -12,6 +61,7 @@
     "mongoose-auto-increment": "^5.0.1",
     "shortid": "^2.2.6"
   },
+  "description": "Simple DB handler to store Ziplinks in MongoDB using Ziplink Storage API v0.1",
   "devDependencies": {
     "chai": "^3.5.0",
     "grunt": "~0.4.2",
@@ -20,5 +70,15 @@
     "grunt-mocha-test": "^0.12.7",
     "jscs": "^3.0.7",
     "mocha": "^2.5.3"
-  }
+  },
+  "gitHead": "c25186e77a84c49db262c6282c837886c7edfee4",
+  "name": "ziplink-basic-mongo-storage",
+  "optionalDependencies": {},
+  "private": true,
+  "readme": "# ziplink-basic-mongo-storage\nSimple DB handler to store Ziplinks in MongoDB using Ziplink Storage API v0.1\n\nFollows a standard Ziplink Storage format and provides:\n - createZiplink(ziplinkData, callback)\n - findByID(ID) //returns the ziplink with the ID provided",
+  "readmeFilename": "README.md",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "version": "0.0.1"
 }
