@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "test": "grunt test",
-    "postinstall": "grunt githooks"
+    "test": "grunt test"
   },
   "dependencies": {
     "base-converter": "^1.1.2",
